@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
  * ユーザー情報のエンティティ
  */
 @Entity
-@Table(name = "users")
+@Table(name = "m_users")
 @Data
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
