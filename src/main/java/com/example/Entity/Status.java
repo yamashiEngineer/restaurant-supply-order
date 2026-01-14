@@ -28,6 +28,6 @@ public class Status {
   private Integer statusCode;
 
   /** ステータス名 （画面表示用の名称） */
-  @Column(name = "status_name", nullable = false, length = 20)
+  @Column(name = "status_name", nullable = true, length = 20)
   private String statusName;
 }

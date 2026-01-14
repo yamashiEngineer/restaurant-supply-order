@@ -25,13 +25,13 @@ public class Users {
   @Column(name = "user_id", length = 20)
   private String userId;
 
-  @Column(name = "password", nullable = false, length = 255)
+  @Column(name = "password", nullable = true, length = 255)
   private String password;
 
-  @Column(name = "user_name", nullable = false, length = 50)
+  @Column(name = "user_name", nullable = true, length = 50)
   private String userName;
 
-  @Column(name = "role_type", nullable = false)
+  @Column(name = "role_type", nullable = true)
   private Integer roleType;
 
   @Column(name = "store_id", length = 10)
