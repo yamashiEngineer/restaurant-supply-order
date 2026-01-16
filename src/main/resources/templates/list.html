@@ -24,16 +24,16 @@
         </thead>
         <tbody>
             <tr th:each="order : ${orders}">
-                <td th:text="${order.id}">101</td>
+                <td th:text="${order.orderId}">101</td>
                 <td th:text="${order.itemName}">備品名</td>
                 <td th:text="${order.quantity}">1</td>
                 <td>
                     <span class="badge" 
-                          th:classappend="${order.status == '完了'} ? 'bg-secondary' : 'bg-primary'"
-                          th:text="${order.status}">ステータス</span>
+                          th:classappend="${order.statusCode == '完了'} ? 'bg-secondary' : 'bg-primary'"
+                          th:text="${order.statusCode}">ステータス</span>
                 </td>
                 <td>
-                    <a th:href="@{/orders/edit/{id}(id=${order.id})}" class="btn btn-sm btn-outline-primary">詳細・編集</a>
+                    <a th:href="@{/orders/edit/{id}(id=${order.orderId})}" class="btn btn-sm btn-outline-primary">詳細・編集</a>
                 </td>
             </tr>
         </tbody>
