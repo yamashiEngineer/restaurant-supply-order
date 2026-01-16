@@ -32,23 +32,23 @@ public class StatusHistory {
   private Integer historyId;
 
   /** 発注ID（t_orders.order_idを参照） */
-  @Column(name = "order_id", nullable = true)
+  @Column(name = "order_id", nullable = false)
   private Integer orderId;
 
   /** 変更前ステータスコード */
-  @Column(name = "before_status_code", nullable = true)
+  @Column(name = "before_status_code", nullable = false)
   private Integer beforeStatusCode;
 
   /** 変更後ステータスコード */
-  @Column(name = "after_status_code", nullable = true)
+  @Column(name = "after_status_code", nullable = false)
   private Integer afterStatusCode;
 
   /** 変更実行者ID（m_users.user_idを参照） */
-  @Column(name = "changed_by", nullable = true, length = 20)
+  @Column(name = "changed_by", nullable = false, length = 20)
   private String changedBy;
 
   /** 変更日時 */
-  @Column(name = "changed_at", nullable = true)
+  @Column(name = "changed_at", nullable = false)
   private LocalDateTime changedAt;
 
   /** 補足コメント（必要に応じて：例「入力ミスによる修正」など） */

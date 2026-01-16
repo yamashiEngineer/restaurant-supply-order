@@ -32,23 +32,23 @@ public class Order {
   private Integer orderId;
 
   /** 申請者ID（m_users.user_idを参照） */
-  @Column(name = "user_id", length = 20, nullable = true)
+  @Column(name = "user_id", length = 20, nullable = false)
   private String userId;
 
   /** 備品名 */
-  @Column(name = "item_name", length = 100, nullable = true)
+  @Column(name = "item_name", length = 100, nullable = false)
   private String itemName;
 
   /** 個数 */
-  @Column(name = "quantity", nullable = true)
+  @Column(name = "quantity", nullable = false)
   private Integer quantity;
 
   /** ステータスコード（m_statuses.status_codeを参照） */
-  @Column(name = "status_code", nullable = true)
+  @Column(name = "status_code", nullable = false)
   private Integer statusCode;
 
   /** 申請日時 */
-  @Column(name = "applied_at", nullable = true)
+  @Column(name = "applied_at", nullable = false)
   private LocalDateTime appliedAt;
 
   /** 更新日時 */
