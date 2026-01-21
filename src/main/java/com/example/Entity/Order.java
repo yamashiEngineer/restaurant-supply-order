@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Table(name = "t_orders")
 @Data
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class Order {
 
@@ -42,6 +42,10 @@ public class Order {
   /** 個数 */
   @Column(name = "quantity", nullable = false)
   private Integer quantity;
+
+  /** 備考 */
+  @Column(name = "remarks", length = 500)
+  private String remarks;
 
   /** ステータスコード（m_statuses.status_codeを参照） */
   @Column(name = "status_code", nullable = false)

@@ -1,14 +1,12 @@
 package com.example.controller;
 
-import com.example.Repository.OrderRepository;
+import com.example.Entity.Order;
 import com.example.Service.OrderService;
 import org.springframework.ui.Model;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import lombok.RequiredArgsConstructor;
 
 /**
  * 発注一覧画面の制御を行うコントローラー
@@ -35,5 +33,17 @@ public class OrderController {
 
     // 3.発注一覧画面のテンプレート名を返す
     return "list";
+  }
+
+  /**
+   * 新規発注作成画面を表示する
+   * URL: GET /orders/new
+   */
+  @GetMapping("/new")
+  public String showCreateForm(Model model) {
+
+    model.addAttribute("orderForm", new Order());
+
+    return "create";
   }
 }
