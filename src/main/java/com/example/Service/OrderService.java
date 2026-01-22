@@ -3,11 +3,10 @@ package com.example.Service;
 import org.springframework.stereotype.Service;
 
 import com.example.Entity.Order;
-import com.example.Entity.StatusHistory;
 import com.example.Repository.OrderRepository;
 import com.example.Repository.StatusHistoryRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -26,4 +25,17 @@ public class OrderService {
   public List<Order> getAllOrders() {
     return orderRepository.findAllByOrderByAppliedAtDesc();
   }
+
+  /**
+   * 新規発注を作成する
+   */
+  @Transactional
+  public void createOrder(Order order) {
+    order.setStatusCode(10);
+    order.setUserId("1");
+    order.setStatusCode(10);
+    order.setAppliedAt(LocalDateTime.now());
+    orderRepository.save(order);
+  }
+
 }

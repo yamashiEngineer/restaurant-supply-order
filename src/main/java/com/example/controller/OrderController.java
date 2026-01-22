@@ -5,8 +5,11 @@ import com.example.Service.OrderService;
 import org.springframework.ui.Model;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * 発注一覧画面の制御を行うコントローラー
@@ -45,5 +48,22 @@ public class OrderController {
     model.addAttribute("orderForm", new Order());
 
     return "create";
+  }
+
+  /**
+   * 新規発注作成処理を行う
+   * URL: POST /create
+   */
+  @PostMapping("/create")
+  public String create(@Validated @ModelAttribute("orderForm") Order order, BindingResult bindingResult,
+      RedirectAttributes redirectAttributes) {
+
+    if (bindingResult.hasErrors()) {
+      return "create";
+    }
+    orderService.createOrder(order);
+
+    redirectAttributes.addFlashAttribute("message", "発注リクエストを登録しました。");
+    return "redirect:/orders";
   }
 }
