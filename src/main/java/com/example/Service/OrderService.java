@@ -33,7 +33,6 @@ public class OrderService {
   public void createOrder(Order order) {
     order.setStatusCode(10);
     order.setUserId("1");
-    order.setStatusCode(10);
     order.setAppliedAt(LocalDateTime.now());
     orderRepository.save(order);
   }

@@ -2,16 +2,12 @@ package com.example.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
-
-import org.antlr.v4.runtime.misc.NotNull;
 
 /**
  * 発注依頼テーブルのエンティティ

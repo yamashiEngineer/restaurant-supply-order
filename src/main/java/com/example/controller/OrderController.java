@@ -63,7 +63,7 @@ public class OrderController {
     }
     orderService.createOrder(order);
 
-    redirectAttributes.addFlashAttribute("message", "発注リクエストを登録しました。");
+    // redirectAttributes.addFlashAttribute("message", "発注リクエストを登録しました。");
     return "redirect:/orders";
   }
 }
