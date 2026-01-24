@@ -6,10 +6,10 @@ import org.springframework.ui.Model;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.data.domain.Page;
 
 /**
  * 発注一覧画面の制御を行うコントローラー
@@ -26,15 +26,21 @@ public class OrderController {
    * URL: GET /orders
    */
   @GetMapping
-  public String showOrderList(Model model) {
+  public String showList(Model model,
+      @RequestParam(value = "page", defaultValue = "0") int page) {
+    int pageSize = 10;
+    Page<Order> orderPage = orderService.findPaginatedOrders(page, pageSize);
 
-    // 1.Serviceを通じてDBから全発注データを取得
-    var orders = orderService.getAllOrders();
+    // 表示するページ番号の範囲を計算（スマートな表示用）
+    int totalPages = orderPage.getTotalPages();
+    int startPage = Math.max(0, page - 2); // 現在の2つ前、ただし0未満にはしない
+    int endPage = Math.min(totalPages - 1, page + 2); // 現在の2つ後、ただし最大数を超えない
 
-    // 2.取得したデータを"orders"という名前でModelに追加
-    model.addAttribute("orders", orders);
+    model.addAttribute("orderPage", orderPage);
+    model.addAttribute("currentPage", page);
+    model.addAttribute("startPage", startPage);
+    model.addAttribute("endPage", endPage);
 
-    // 3.発注一覧画面のテンプレート名を返す
     return "list";
   }
 
@@ -63,7 +69,7 @@ public class OrderController {
     }
     orderService.createOrder(order);
 
-    // redirectAttributes.addFlashAttribute("message", "発注リクエストを登録しました。");
+    redirectAttributes.addFlashAttribute("message", "発注リクエストを登録しました。");
     return "redirect:/orders";
   }
 }

@@ -1,5 +1,6 @@
 package com.example.Service;
 
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.example.Entity.Order;
@@ -8,6 +9,7 @@ import com.example.Repository.StatusHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -37,4 +39,9 @@ public class OrderService {
     orderRepository.save(order);
   }
 
+  @Transactional(readOnly = true)
+  public Page<Order> findPaginatedOrders(int page, int size) {
+
+    return orderRepository.findAllByOrderByAppliedAtDesc(PageRequest.of(page, size));
+  }
 }
