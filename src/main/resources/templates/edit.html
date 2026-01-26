@@ -11,8 +11,8 @@
         <h2>発注詳細・編集</h2>
         <div class="card mt-4">
             <div class="card-body">
-                <form th:action="@{/orders/update/{id}(id=${orderForm.id})}" th:object="${orderForm}" method="post">
-                    <input type="hidden" th:field="*{id}">
+                <form th:action="@{/orders/update/{id}(id=${order.orderId})}" th:object="${order}" method="post">
+                    <input type="hidden" th:field="*{orderId}">
 
                     <div class="mb-3">
                         <label class="form-label">備品名</label>
@@ -21,17 +21,18 @@
 
                     <div class="mb-3">
                         <label class="form-label">ステータス更新</label>
-                        <select th:field="*{status}" class="form-select">
-                            <option th:value="未着手">未着手</option>
-                            <option th:value="確認中">確認中</option>
-                            <option th:value="発送済み">発送済み</option>
-                            <option th:value="完了">完了</option>
+                        <select th:field="*{statusCode}" class="form-select">
+                            <option th:value="10">未着手</option>
+                            <option th:value="20">確認中</option>
+                            <option th:value="30">発送済み</option>
+                            <option th:value="40">完了</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
                         <label class="form-label">本部コメント</label>
-                        <textarea th:field="*{adminComment}" class="form-control"></textarea>
+                        <textarea 
+                         class="form-control"></textarea>
                     </div>
 
                     <button type="submit" class="btn btn-primary">更新を保存</button>

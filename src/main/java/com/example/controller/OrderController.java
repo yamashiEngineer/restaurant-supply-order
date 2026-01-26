@@ -72,4 +72,15 @@ public class OrderController {
     redirectAttributes.addFlashAttribute("message", "発注リクエストを登録しました。");
     return "redirect:/orders";
   }
+
+  /**
+   * 発注詳細画面を表示する
+   */
+  @GetMapping("/edit/{id}")
+  public String showDetail(@PathVariable("id") Integer id, Model model) {
+    // Serviceから1件取得
+    Order order = orderService.findOrderById(id);
+    model.addAttribute("order", order);
+    return "edit";
+  }
 }

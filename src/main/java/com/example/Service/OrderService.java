@@ -44,4 +44,12 @@ public class OrderService {
 
     return orderRepository.findAllByOrderByAppliedAtDesc(PageRequest.of(page, size));
   }
+
+  /**
+   * 指定したIDの発注を取得する
+   */
+  public Order findOrderById(Integer id) {
+    return orderRepository.findById(id)
+        .orElseThrow(() -> new IllegalArgumentException("指定したIDが見つかりません: " + id));
+  }
 }
