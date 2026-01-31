@@ -1,0 +1,20 @@
+<style>
+    .custom-alert {
+        background-color: #f8fff9; /* 非常に薄い緑（清潔感） */
+        border: 1px solid #d1e7dd;
+        border-left: 5px solid #198754; /* 左端の太いラインで強調 */
+        border-radius: 4px;
+        padding: 1rem 1.25rem;
+        color: #0f5132;
+    }
+
+    .alert-icon {
+        margin-right: 12px;
+        display: flex;
+        align-items: center;
+    }
+
+    .alert-content {
+        font-size: 0.95rem;
+    }
+</style>

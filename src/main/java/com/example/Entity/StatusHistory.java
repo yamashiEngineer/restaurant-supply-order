@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Table(name = "t_status_histories")
 @Data
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 public class StatusHistory {
 

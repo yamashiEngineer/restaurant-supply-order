@@ -4,6 +4,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.example.Entity.Order;
+import com.example.Entity.StatusHistory;
 import com.example.Repository.OrderRepository;
 import com.example.Repository.StatusHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class OrderService {
 
   private final OrderRepository orderRepository;
@@ -51,5 +52,32 @@ public class OrderService {
   public Order findOrderById(Integer id) {
     return orderRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("指定したIDが見つかりません: " + id));
+  }
+
+  /**
+   * ステータスの更新と履歴の保存
+   */
+  @Transactional
+  public void updateOrderStatus(Integer orderId, Integer newStatusCode, String comment) {
+    // 1.現在の発注情報を取得
+    Order order = findOrderById(orderId);
+    Integer oldStatusCode = order.getStatusCode();
+
+    // 2.ステータスを更新して保存
+    order.setStatusCode(newStatusCode);
+    order.setUpdatedAt(LocalDateTime.now());
+    orderRepository.save(order);
+
+    // 3.履歴を作成して保存
+    StatusHistory history = StatusHistory.builder()
+        .orderId(orderId)
+        .beforeStatusCode(oldStatusCode)
+        .afterStatusCode(newStatusCode)
+        .changedAt(LocalDateTime.now())
+        .changedBy("1")
+        .comment(comment)
+        .build();
+
+    statusHistoryRepository.save(history);
   }
 }

@@ -83,4 +83,16 @@ public class OrderController {
     model.addAttribute("order", order);
     return "edit";
   }
+
+  @PostMapping("/{id}/update-status")
+  public String updateStatus(@PathVariable("id") Integer id,
+      @RequestParam("statusCode") Integer statusCode,
+      @RequestParam("comment") String comment,
+      RedirectAttributes redirectAttributes) {
+
+    orderService.updateOrderStatus(id, statusCode, comment);
+
+    redirectAttributes.addFlashAttribute("message", "ステータスを更新しました。");
+    return "redirect:/orders/edit/" + id; // 詳細画面へリダイレクト
+  }
 }
