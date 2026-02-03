@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>発注一覧</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-</head>
+<head th:replace="~{common/layout :: common_head('発注詳細・編集')}"></head>
 <body>
+<div th:replace="~{common/layout ::common_nav}"></div>
+
 <div class="container mt-4">
     <div class="col-md-8 offset-md-2">
         <h2>発注詳細・編集</h2>
@@ -34,17 +31,8 @@
                         <label class="form-label">本部コメント</label>
                         <textarea name="comment" class="form-control"></textarea>
                     </div>
-                    <div th:if="${message}" class="custom-alert shadow-sm d-flex align-items-center mb-4">
-                        <div class="alert-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#198754" viewBox="0 0 16 16">
-                                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                            </svg>
-                        </div>
-                        <div class="alert-content">
-                            <strong class="me-1">完了:</strong>
-                            <span th:text="${message}">ステータスを更新しました。</span>
-                        </div>
-                    </div>
+                    <div th:replace="~{common/layout :: seccess_alert}"></div>
+
                     <button type="submit" class="btn btn-primary">更新を保存</button>
                     <a th:href="@{/orders}" class="btn btn-link text-secondary">戻る</a>
                 </form>

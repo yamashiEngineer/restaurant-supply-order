@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>発注一覧</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+<head th:replace="~{common/layout :: common_head('新規発注リクエスト')}"></head>
 <body>
+<div th:replace="~{common/layout :: common_nav}"></div>
+
 <div class="container mt-4">
     <div class="col-md-8 offset-md-2">
         <h2>新規発注リクエスト</h2>
