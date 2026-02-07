@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.IntStream;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Component
 @RequiredArgsConstructor
@@ -27,7 +29,7 @@ public class TestDataLoader implements CommandLineRunner {
   private final StatusRepository statusRepository;
   private final OrderRepository orderRepository;
   private final StatusHistoryRepository statusHistoryRepository;
-
+  private final PasswordEncoder passwordEncoder;
   private final Random random = new Random();
 
   @Override
@@ -44,9 +46,11 @@ public class TestDataLoader implements CommandLineRunner {
     statusRepository.saveAll(statuses);
 
     // 2. 利用者マスタ: 1000件
+    String commonHash = passwordEncoder.encode("password");
+
     var userList = IntStream.rangeClosed(1, 1000).mapToObj(i -> Users.builder()
         .userId("user_id" + String.format("%04d", i))
-        .password("password") // 本来はBCrypt化
+        .password(commonHash) // 本来はBCrypt化
         .userName("テスト太郎" + i)
         .roleType(i % 2 == 0 ? 1 : 2) // 交互にスタッフと本部
         .storeId(i % 2 == 0 ? "S" + String.format("%03d", i / 10) : null)
