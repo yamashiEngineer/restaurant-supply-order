@@ -56,4 +56,27 @@ public class UserController {
     session.invalidate();
     return "redirect:/login";
   }
+
+  /* パスワード変更画面の表示 */
+  @GetMapping("/password")
+  public String showChangePassword() {
+    return "password_change";
+  }
+
+  /* パスワード変更の実行 */
+  @PostMapping("/password")
+  public String changePassword(@RequestParam String currentPassword, @RequestParam String newPassword,
+      RedirectAttributes redirectAttributes) {
+    // セッションから現在ログイン中のユーザーIDを取得
+    Users loginUser = (Users) session.getAttribute("loginUser");
+
+    try {
+      userService.changePassword(loginUser.getUserId(), currentPassword, newPassword);
+      redirectAttributes.addFlashAttribute("message", "パスワードを変更しました。");
+      return "redirect:/login";
+    } catch (RuntimeException e) {
+      redirectAttributes.addFlashAttribute("error", e.getMessage());
+      return "redirect:/login/password";
+    }
+  }
 }

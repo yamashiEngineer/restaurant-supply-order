@@ -3,6 +3,9 @@ package com.example.Service;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import com.example.Repository.UserRepository;
+
+import jakarta.transaction.Transactional;
+
 import com.example.Entity.Users;
 import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,6 +36,22 @@ public class UserService {
     String encodedPassword = passwordEncoder.encode(user.getPassword());
     user.setPassword(encodedPassword);
 
+    userRepository.save(user);
+  }
+
+  @Transactional
+  public void changePassword(String userId, String currentPassword, String newPassword) {
+    // 1.ユーザーの存在確認
+    Users user = userRepository.findByUserId(userId)
+        .orElseThrow(() -> new RuntimeException("ユーザーが見つかりません。"));
+
+    // 2.現在のパスワードが正しいかチェック
+    if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+      throw new RuntimeException("現在のパスワードが正しくありません。");
+    }
+
+    // 3.新しいパスワードをハッシュ化して保存
+    user.setPassword(passwordEncoder.encode(newPassword));
     userRepository.save(user);
   }
 }

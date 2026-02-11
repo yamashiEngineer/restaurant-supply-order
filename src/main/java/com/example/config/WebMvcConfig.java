@@ -16,7 +16,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
     registry.addInterceptor(loginInterceptor)
         .addPathPatterns("/**") // すべてのURLを監視対象にする
         .excludePathPatterns(
-            "/login/**", // ログイン関連は除外
+            "/login",
+            "/login/process",
+            "/login/logout",
             "/h2-console/**", // DBコンソールは除外
             "/css/**", "/js/**", "/images/**" // 静的ファイルは除外
         );
