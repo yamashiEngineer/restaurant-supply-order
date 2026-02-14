@@ -40,7 +40,16 @@ public class UserController {
       // 認証成功：セッションにユーザー情報を保存
       session.setAttribute("loginUser", user);
 
-      // 発注リクエスト画面へリダイレクト
+      // 「想定外」を弾く（ガード句）
+      if (user == null || (user.getRoleType() != 1 && user.getRoleType() != 2)) {
+        throw new RuntimeException("不正な権限を持つユーザーです");
+      }
+
+      if (user.getRoleType() == 2) {
+        // 本部ユーザーの場合、発注一覧画面へリダイレクト
+        return "redirect:/orders";
+      }
+      // 店舗ユーザーの場合、新規発注画面へリダイレクト
       return "redirect:/orders/new";
 
     } catch (RuntimeException e) {
@@ -72,7 +81,7 @@ public class UserController {
 
     try {
       userService.changePassword(loginUser.getUserId(), currentPassword, newPassword);
-      redirectAttributes.addFlashAttribute("message", "パスワードを変更しました。");
+      redirectAttributes.addFlashAttribute("successMessage", "パスワードを変更しました。");
       return "redirect:/login";
     } catch (RuntimeException e) {
       redirectAttributes.addFlashAttribute("error", e.getMessage());

@@ -7,6 +7,10 @@
         <div class="col-md-4">
             <h3 class="text-center mb-4">備品発注システム ログイン</h3>
             <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+            <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <span th:text="${successMessage}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
 
             <form th:action="@{/login/process}" method="post">
                 <div class="mb-3">

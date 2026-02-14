@@ -31,6 +31,7 @@ public class Users {
   @Column(name = "user_name", nullable = false, length = 50)
   private String userName;
 
+  /** 役職（1: 店舗スタッフ, 2: 本部スタッフ） */
   @Column(name = "role_type", nullable = false)
   private Integer roleType;
 
