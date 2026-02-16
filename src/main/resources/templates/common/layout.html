@@ -25,12 +25,12 @@
   <div class="container">
     <a class="navbar-brand" th:href="@{/orders}">備品発注システム</a>
     <div class="d-flex align-items-center">
-        <div th:if="${session.loginUser != null && session.loginUser.roleType == 1}" class="me-3">
-            <a th:href="@{/login/password}" class="btn btn-sm btn-outline-secondary">
-                <i class="bi bi-key"></i> パスワード変更
-            </a>
-        </div>
-        <a th:href="@{/login/logout}" class="btn btn-sm btn-outline-danger">ログアウト</a>
+      <div th:if="${session.loginUser != null && session.loginUser.roleType == T(com.example.config.RoleType).SHOP.code}" class="me-3">
+          <a th:href="@{/login/password}" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-key"></i> パスワード変更
+          </a>
+      </div>
+      <a th:href="@{/login/logout}" class="btn btn-sm btn-outline-danger">ログアウト</a>
     </div>
   </div>
 </nav>

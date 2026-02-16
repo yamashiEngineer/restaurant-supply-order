@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.example.Service.UserService;
 import jakarta.servlet.http.HttpSession;
+import com.example.config.RoleType;
 
 import java.util.List;
 
@@ -40,12 +41,14 @@ public class UserController {
       // 認証成功：セッションにユーザー情報を保存
       session.setAttribute("loginUser", user);
 
+      RoleType role = RoleType.fromCode(user.getRoleType());
+
       // 「想定外」を弾く（ガード句）
       if (user == null || (user.getRoleType() != 1 && user.getRoleType() != 2)) {
         throw new RuntimeException("不正な権限を持つユーザーです");
       }
 
-      if (user.getRoleType() == 2) {
+      if (role == RoleType.HEAD_OFFICE) {
         // 本部ユーザーの場合、発注一覧画面へリダイレクト
         return "redirect:/orders";
       }
@@ -81,6 +84,7 @@ public class UserController {
 
     try {
       userService.changePassword(loginUser.getUserId(), currentPassword, newPassword);
+      session.invalidate(); // パスワード変更後はセッションを無効化して再ログインを促す
       redirectAttributes.addFlashAttribute("successMessage", "パスワードを変更しました。");
       return "redirect:/login";
     } catch (RuntimeException e) {
