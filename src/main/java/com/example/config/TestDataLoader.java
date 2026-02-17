@@ -48,13 +48,17 @@ public class TestDataLoader implements CommandLineRunner {
     // 2. 利用者マスタ: 1000件
     String commonHash = passwordEncoder.encode("password");
 
-    var userList = IntStream.rangeClosed(1, 1000).mapToObj(i -> Users.builder()
-        .userId("user_id" + String.format("%04d", i))
-        .password(commonHash) // 本来はBCrypt化
-        .userName("テスト太郎" + i)
-        .roleType(i % 2 == 0 ? 1 : 2) // 交互にスタッフと本部
-        .storeId(i % 2 == 0 ? "S" + String.format("%03d", i / 10) : null)
-        .build()).toList();
+    var userList = IntStream.rangeClosed(1, 1000).mapToObj(i -> {
+      // 偶数なら店舗、奇数なら本部
+      RoleType role = (i % 2 == 0) ? RoleType.SHOP : RoleType.HEAD_OFFICE;
+
+      return Users.builder()
+          .userId("user_id" + String.format("%04d", i))
+          .password(commonHash)
+          .userName("テスト太郎" + i)
+          .roleType(role.getCode()) // Enumから数字を取得
+          .build();
+    }).toList();
     userRepository.saveAll(userList);
 
     // 3. オーダーテーブル: 500件
