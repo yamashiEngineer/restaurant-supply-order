@@ -58,4 +58,8 @@ public class Order {
   /** 更新日時 */
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
+
+  public OrderStatus getStatusEnum() {
+    return OrderStatus.fromCode(this.statusCode);
+  }
 }

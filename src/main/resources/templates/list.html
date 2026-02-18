@@ -27,13 +27,11 @@
                 <td th:text="${order.orderId}">101</td>
                 <td th:text="${order.itemName}">備品名</td>
                 <td th:text="${order.quantity}">1</td>
-                <td th:switch="${order.statusCode}">
-                    <span th:case="10" class="badge bg-secondary">未着手</span>
-                    <span th:case="20" class="badge bg-primary">確認中</span>
-                    <span th:case="30" class="badge bg-info">発送済</span>
-                    <span th:case="40" class="badge bg-success">完了</span>
-                    <span th:case="*" th:text="${order.statusCode}"></span>
-                </td>
+                <td>
+                    <span class="badge shadow-sm" th:classappend="${order.statusEnum.colorClass}" th:text="${order.statusEnum.name}">
+                        未着手
+                    </span>
+                </td> 
                 <td>
                     <div th:if="${session.loginUser.roleType == 2}">
                         <a th:href="@{/orders/edit/{id}(id=${order.orderId})}" class="btn btn-sm btn-outline-primary">詳細・編集</a>
