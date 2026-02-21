@@ -10,6 +10,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.data.domain.Page;
+import com.example.Repository.StatusHistoryRepository;
+import com.example.Entity.StatusHistory;
+import java.util.List;
 
 /**
  * 発注一覧画面の制御を行うコントローラー
@@ -20,6 +23,7 @@ import org.springframework.data.domain.Page;
 public class OrderController {
 
   private final OrderService orderService;
+  private final StatusHistoryRepository statusHistoryRepository;
 
   /**
    * 発注一覧画面を表示する
@@ -77,10 +81,15 @@ public class OrderController {
    * 発注詳細画面を表示する
    */
   @GetMapping("/edit/{id}")
-  public String showDetail(@PathVariable("id") Integer id, Model model) {
+  public String showDetail(@PathVariable Integer id, Model model) {
     // Serviceから1件取得
     Order order = orderService.findOrderById(id);
+
+    List<StatusHistory> historyList = statusHistoryRepository.findByOrderIdOrderByChangedAtDesc(id);
+
     model.addAttribute("order", order);
+    model.addAttribute("historyList", historyList);
+
     return "edit";
   }
 

@@ -12,6 +12,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 /**
  * ステータス変更履歴テーブルのエンティティ
@@ -54,4 +56,8 @@ public class StatusHistory {
   /** 補足コメント（必要に応じて：例「入力ミスによる修正」など） */
   @Column(name = "comment", length = 255)
   private String comment;
+
+  @ManyToOne
+  @JoinColumn(name = "changed_by", referencedColumnName = "user_id", insertable = false, updatable = false)
+  private Users changer;
 }

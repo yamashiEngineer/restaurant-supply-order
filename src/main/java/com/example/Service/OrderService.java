@@ -5,12 +5,14 @@ import org.springframework.stereotype.Service;
 
 import com.example.Entity.Order;
 import com.example.Entity.StatusHistory;
+import com.example.Entity.Users;
 import com.example.Repository.OrderRepository;
 import com.example.Repository.StatusHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.data.domain.Page;
+import jakarta.servlet.http.HttpSession;
 
 import java.util.List;
 
@@ -21,6 +23,7 @@ public class OrderService {
 
   private final OrderRepository orderRepository;
   private final StatusHistoryRepository statusHistoryRepository;
+  private final HttpSession session;
 
   /**
    * すべての発注一覧を取得する
@@ -63,6 +66,9 @@ public class OrderService {
     Order order = findOrderById(orderId);
     Integer oldStatusCode = order.getStatusCode();
 
+    // セッションから現在ログイン中のユーザーIDを取得
+    Users loginUser = (Users) session.getAttribute("loginUser");
+
     // 2.ステータスを更新して保存
     order.setStatusCode(newStatusCode);
     order.setUpdatedAt(LocalDateTime.now());
@@ -74,7 +80,7 @@ public class OrderService {
         .beforeStatusCode(oldStatusCode)
         .afterStatusCode(newStatusCode)
         .changedAt(LocalDateTime.now())
-        .changedBy("1")
+        .changedBy(loginUser.getUserId())
         .comment(comment)
         .build();
 

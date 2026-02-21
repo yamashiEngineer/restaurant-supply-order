@@ -37,6 +37,56 @@
                     <a th:href="@{/orders}" class="btn btn-link text-secondary">戻る</a>
                 </form>
             </div>
+            <div class="card history-card mt-5">
+                <div class="card-header">
+                    <h5 class="fw-bold"><i class="bi bi-clock-history me-2"></i>対応履歴</h5>
+                </div>
+                <div class="card-body p-0"> <table class="table table-history mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 20%">日時</th>
+                                <th style="width: 30%">内容</th>
+                                <th style="width: 20%">担当者</th>
+                                <th style="width: 30%">コメント</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="history : ${historyList}">
+                                <td class="text-secondary" th:text="${#temporals.format(history.changedAt, 'yyyy/MM/dd HH:mm')}"></td>
+                                <td>
+                                    <div class="status-flow">
+                                        <small class="text-muted text-decoration-line-through" 
+                                            th:text="${T(com.example.Entity.OrderStatus).fromCode(history.beforeStatusCode).name}">
+                                        </small>
+                                        <i class="bi bi-arrow-right-short text-primary fs-5"></i>
+                                        <span class="badge rounded-pill" 
+                                            th:classappend="${T(com.example.Entity.OrderStatus).fromCode(history.afterStatusCode).colorClass}" 
+                                            th:text="${T(com.example.Entity.OrderStatus).fromCode(history.afterStatusCode).name}">
+                                        </span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div th:if="${history.changer != null}">
+                                        <span th:if="${history.changer.roleType == T(com.example.config.RoleType).HEAD_OFFICE.code}" 
+                                            class="badge role-badge bg-dark">本部</span>
+                                        <span th:if="${history.changer.roleType == T(com.example.config.RoleType).SHOP.code}" 
+                                            class="badge role-badge border text-dark">店舗</span>
+                                        
+                                        <span class="ms-1 small text-dark" th:text="${history.changer.userName}"></span>
+                                    </div>
+                                    <span th:unless="${history.changer != null}" class="text-muted small">不明</span>
+                                </td>
+                                <td>
+                                    <span class="small" th:text="${history.comment}"></span>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(historyList)}">
+                                <td colspan="4" class="text-center py-4 text-muted">履歴はまだありません</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
