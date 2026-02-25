@@ -93,6 +93,14 @@ public class OrderController {
     return "edit";
   }
 
+  /**
+   * /orders/edit や /orders/edit/ にIDなしでアクセスされた場合、一覧へ戻す
+   */
+  @GetMapping({ "/edit", "/edit/" }) // 両方のパターンを配列形式で指定
+  public String handleMissingId() {
+    return "redirect:/orders";
+  }
+
   @PostMapping("/{id}/update-status")
   public String updateStatus(@PathVariable("id") Integer id,
       @RequestParam("statusCode") Integer statusCode,
