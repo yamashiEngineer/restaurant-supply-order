@@ -66,4 +66,39 @@ class OrderServiceTest {
     assertNotNull(order.getAppliedAt(), "申請日時がセットされていること");
     verify(orderRepository).save(order);
   }
+
+  @Test
+  @DisplayName("findPaginatedOrders: 指定したページサイズでデータが取得できること")
+  void findPaginatedOrders_Success() {
+    int page = 0;
+    int size = 5;
+    Page<Order> expectedPage = new PageImpl<>(Arrays.asList(new Order()));
+    when(orderRepository.findAllByOrderByAppliedAtDesc(any(PageRequest.class))).thenReturn(expectedPage);
+
+    Page<Order> actualPage = orderService.findPaginatedOrders(page, size);
+
+    assertEquals(expectedPage, actualPage);
+    verify(orderRepository).findAllByOrderByAppliedAtDesc(PageRequest.of(page, size));
+  }
+
+  @Test
+  @DisplayName("findOrderById: 存在するIDの場合、発注データが返ること")
+  void findOrderById_Success() {
+    Integer id = 1;
+    Order order = new Order();
+    when(orderRepository.findById(id)).thenReturn(Optional.of(order));
+
+    Order result = orderService.findOrderById(id);
+
+    assertEquals(order, result);
+  }
+
+  @Test
+  @DisplayName("findOrderById: 存在しないIDの場合、例外がスローされること")
+  void findOrderById_NotFound() {
+    Integer id = 99999;
+    when(orderRepository.findById(id)).thenReturn(Optional.empty());
+
+    assertThrows(IllegalArgumentException.class, () -> orderService.findOrderById(id));
+  }
 }
