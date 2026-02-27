@@ -19,8 +19,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import com.example.Entity.Order;
-import com.example.Entity.StatusHistory;
 import com.example.Entity.Users;
+import com.example.Entity.StatusHistory;
 import com.example.Repository.OrderRepository;
 import com.example.Repository.StatusHistoryRepository;
 
@@ -100,5 +100,60 @@ class OrderServiceTest {
     when(orderRepository.findById(id)).thenReturn(Optional.empty());
 
     assertThrows(IllegalArgumentException.class, () -> orderService.findOrderById(id));
+  }
+
+  @Test
+  @DisplayName("updateOrderStatus: ステータスが更新され、履歴が保存されること")
+  void updateOrderStatus_Success() {
+    // 1.準備（Arrange）
+    Integer orderId = 100;
+    Integer oldStatus = 10;
+    Integer newStatus = 20;
+    String comment = "確認しました。";
+    String loginUserId = "user-999";
+
+    // 既存の発注データ
+    Order existingOrder = new Order();
+    existingOrder.setOrderId(orderId);
+    existingOrder.setStatusCode(oldStatus);
+
+    // セッションに格納されているユーザーデータ
+    Users loginUser = new Users();
+    loginUser.setUserId(loginUserId);
+
+    // モックの挙動設定
+    when(orderRepository.findById(orderId)).thenReturn(Optional.of(existingOrder));
+    when(session.getAttribute("loginUser")).thenReturn(loginUser);
+
+    // 2.実行（Act）
+    orderService.updateOrderStatus(orderId, newStatus, comment);
+
+    // 3.検証（Assert）
+    // 発注のステータスが更新されていること
+    assertEquals(newStatus, existingOrder.getStatusCode());
+    verify(orderRepository).save(existingOrder);
+
+    // 履歴が保存されていること
+    verify(statusHistoryRepository).save(argThat(history -> history.getOrderId().equals(orderId) &&
+        history.getBeforeStatusCode().equals(oldStatus) &&
+        history.getAfterStatusCode().equals(newStatus) &&
+        history.getChangedBy().equals(loginUserId) &&
+        history.getComment().equals(comment)));
+  }
+
+  @Test
+  @DisplayName("ステータス更新失敗：セッションにユーザーがいない場合にNullPointerExceptionが発生すること")
+  void updateOrderStatus_NoSessionUser() {
+    // 1. 準備
+    Integer orderId = 100;
+    Order order = new Order();
+    when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
+
+    // セッションにユーザーがいない（nullが返る）状態
+    when(session.getAttribute("loginUser")).thenReturn(null);
+
+    // 2. 実行 & 検証
+    // 現在の実装だと loginUser.getUserId() で落ちるはずなので、それを検証
+    assertThrows(NullPointerException.class, () -> orderService.updateOrderStatus(orderId, 20, "comment"));
   }
 }
