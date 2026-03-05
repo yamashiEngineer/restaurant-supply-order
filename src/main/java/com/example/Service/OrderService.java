@@ -37,8 +37,14 @@ public class OrderService {
    */
   @Transactional
   public void createOrder(Order order) {
+    Users loginUser = (Users) session.getAttribute("loginUser");
+    if (loginUser != null) {
+      order.setUserId(loginUser.getUserId());
+    } else {
+      order.setUserId("guest");
+    }
+
     order.setStatusCode(10);
-    order.setUserId("1");
     order.setAppliedAt(LocalDateTime.now());
     orderRepository.save(order);
   }
