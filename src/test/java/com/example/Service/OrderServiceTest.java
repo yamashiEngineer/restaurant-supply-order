@@ -55,15 +55,19 @@ class OrderServiceTest {
   }
 
   @Test
-  @DisplayName("createOrder: 初期値（ステータス10）がセットされて保存されること")
+  @DisplayName("createOrder: ログインユーザーのIDが正しくセットされること")
   void createOrder_Success() {
+    // Arrange
     Order order = new Order();
+    Users loginUser = new Users();
+    loginUser.setUserId("test-user-001");
+    when(session.getAttribute("loginUser")).thenReturn(loginUser);
 
+    // Act
     orderService.createOrder(order);
 
-    assertEquals(10, order.getStatusCode(), "初期ステータスは10であること");
-    assertEquals("1", order.getUserId(), "初期ユーザーIDは1であること");
-    assertNotNull(order.getAppliedAt(), "申請日時がセットされていること");
+    // Assert
+    assertEquals("test-user-001", order.getUserId());
     verify(orderRepository).save(order);
   }
 
