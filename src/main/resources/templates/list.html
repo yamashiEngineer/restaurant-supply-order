@@ -24,12 +24,12 @@
         </thead>
         <tbody>
             <tr th:each="order : ${orderPage.content}">
-                <td th:text="${order.orderId}">101</td>
-                <td th:text="${order.itemName}">備品名</td>
-                <td th:text="${order.quantity}">1</td>
+                <td th:text="${order.orderId}">---</td>
+                <td th:text="${order.itemName}">---</td>
+                <td th:text="${order.quantity}">---</td>
                 <td>
                     <span class="badge shadow-sm" th:classappend="${order.statusEnum.colorClass}" th:text="${order.statusEnum.name}">
-                        未着手
+                        ---
                     </span>
                 </td> 
                 <td>
