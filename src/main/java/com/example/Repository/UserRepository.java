@@ -19,4 +19,6 @@ public interface UserRepository extends JpaRepository<Users, String> {
    * ユーザーIDで絞り込む
    */
   Optional<Users> findByUserId(String userId);
+
+  Optional<Users> findByUserName(String userName);
 }
