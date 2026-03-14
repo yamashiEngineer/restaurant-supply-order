@@ -21,11 +21,15 @@
   </div>
 </div>
 
-<nav th:fragment="common_nav" class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+<nav th:fragment="common_nav" class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
   <div class="container">
-    <a class="navbar-brand" th:href="@{/orders}">備品発注システム</a>
+    <a class="navbar-brand fw-bold" th:href="@{/orders}">備品発注システム</a>
     <div class="d-flex align-items-center">
-      <div th:if="${session.loginUser != null && session.loginUser.roleType == T(com.example.config.RoleType).SHOP.code}" class="me-3">
+      <div th:if="${session.loginUser != null}" class="me-3 text-light small">
+        <span class="badge bg-secondary me-1">ログイン中</span>
+        <span class="fw-bold" th:text="${session.loginUser.userName}"></span>
+      </div>
+      <div th:if="${session.loginUser != null && session.loginUser.roleType == T(com.example.config.RoleType).SHOP.code}" class="me-2">
           <a th:href="@{/login/password}" class="btn btn-sm btn-outline-secondary">
             <i class="bi bi-key"></i> パスワード変更
           </a>
