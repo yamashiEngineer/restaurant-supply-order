@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+    <div th:fragment="double-submit-prevention">
+        <script th:inline="javascript">
+            function disableSubmitButton(form) {
+                // 送信ボタンを取得（id="submitBtn" のボタンを探す）
+                const submitBtn = document.getElementById('submitBtn');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                }
+                return true;
+            }
+        </script>
+    </div>
+
+</body>
+</html>

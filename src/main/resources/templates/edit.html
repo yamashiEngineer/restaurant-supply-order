@@ -9,7 +9,7 @@
         <h2>発注詳細・編集</h2>
         <div class="card mt-4">
             <div class="card-body">
-                <form th:action="@{/orders/{id}/update-status(id=${order.orderId})}" th:object="${order}" method="post">
+                <form th:action="@{/orders/{id}/update-status(id=${order.orderId})}" th:object="${order}" method="post" onsubmit="return disableSubmitButton(this)">
                     <input type="hidden" th:field="*{orderId}">
 
                     <div class="mb-3">
@@ -33,7 +33,7 @@
                     </div>
                     <div th:replace="~{common/layout :: seccess_alert}"></div>
 
-                    <button type="submit" class="btn btn-primary">更新を保存</button>
+                    <button type="submit" id="submitBtn" class="btn btn-primary">更新を保存</button>
                     <a th:href="@{/orders}" class="btn btn-link text-secondary">戻る</a>
                 </form>
             </div>
@@ -90,5 +90,6 @@
         </div>
     </div>
 </div>
+<div th:replace="~{common/scripts :: double-submit-prevention}"></div>
 </body>
 </html>
