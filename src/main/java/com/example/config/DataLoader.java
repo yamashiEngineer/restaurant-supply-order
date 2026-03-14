@@ -62,34 +62,72 @@ public class DataLoader implements CommandLineRunner {
       userRepository.save(tenpo);
     }
 
+    // 店舗スタッフ（追加分）
+    List<String> tenpoNames = List.of(
+        "梅田", "難波", "天王寺", "心斎橋", "京橋", "淀屋橋", "本町", "江坂", "茨木", "高槻",
+        "吹田", "豊中", "枚方", "堺東", "鳳", "三宮", "元町", "西宮北口", "夙川", "芦屋",
+        "尼崎", "伊丹", "宝塚", "川西", "明石", "加古川", "姫路", "京都河原町", "烏丸", "桂",
+        "伏見", "宇治", "大津", "草津", "奈良", "生駒", "和歌山市", "岩出", "千里中央", "くずは");
+
+    // 複数ユーザーの登録
+    for (int i = 0; i < tenpoNames.size(); i++) {
+      String cityName = tenpoNames.get(i);
+      // ユーザーIDは tenpo01, tenpo02...
+      String userId = String.format("tenpo%02d", i + 1);
+
+      if (!userRepository.existsByUserId(userId)) {
+        Users user = new Users();
+        user.setUserId(userId);
+        user.setPassword(passwordEncoder.encode("tenpo"));
+
+        user.setUserName(cityName + "店スタッフ");
+
+        user.setRoleType(RoleType.SHOP.getCode());
+        userRepository.save(user);
+      }
+    }
+
     // 共通パスワードのハッシュ化
     String commonHash = passwordEncoder.encode("password");
 
-    // 2. 発注データの投入 (A-2, D系テスト用)
-    // 「再発注」のテスト(A-2)で「既に存在する備品」として認識させるための初期データ
-    // ※ repositoryやEntityのメソッド名はご自身の環境に合わせて調整してください
-    if (orderRepository.count() == 0) {
-      Order initialOrder = new Order();
-      initialOrder.setItemName("A4コピー用紙"); // A-2テストでこれと同じ名前を入力する
-      initialOrder.setQuantity(1);
-      initialOrder.setUserId("test_user"); // 店舗ユーザーが申請者
-      initialOrder.setAppliedAt(LocalDateTime.now());
-      initialOrder.setStatusCode(20); // 20 = 発注済み
-      orderRepository.save(initialOrder);
+    // 2. 発注データの投入
+    // すでにデータがある場合は投入しない（二重登録防止）
+    if (orderRepository.count() > 0) {
+      return;
+    }
 
-      // 1. 履歴オブジェクトを組み立てる
-      StatusHistory history = StatusHistory.builder()
-          .orderId(1) // 対象の発注ID
-          .beforeStatusCode(10) // 変更前：未着手
-          .afterStatusCode(20) // 変更後：確認中
-          .changedBy("honbu_user") // 実行者のユーザーID
-          .changedAt(LocalDateTime.now()) // 現在日時
-          .comment("備品の在庫を確認したためステータスを更新しました。")
-          .build();
+    List<String> supplies = List.of(
+        "パスタ（スパゲッティ 1.6mm）", "トマトソース（缶）", "エクストラバージンオリーブオイル", "グラナパダーノチーズ",
+        "冷凍ハンバーグ（100g）", "ミラノ風ドリアソース", "辛味チキン（冷凍）", "エスカルゴ（殻なし）",
+        "生ハム（プロシュート）", "モッツァレラチーズ", "ライス（千葉県産コシヒカリ）", "たまご（Lサイズ）",
+        "ワイン（赤・マグナム）", "ワイン（白・デキャンタ）", "ドリンクバー用シロップ（コーラ）", "ティーバッグ（アールグレイ）",
+        "ペーパーナプキン（ロゴ入り）", "割り箸（個包装）", "プラスチックスプーン", "おしぼり（業務用）",
+        "食器用洗剤（中性）", "除菌用アルコール噴霧剤", "キッチンペーパー", "ゴミ袋（45L・透明）",
+        "メニューブック（春・夏版）", "オーダーエントリー端末用ロール紙", "テーブルクロスクリーナー", "トイレ掃除用ブラシ",
+        "サラダ用レタス", "食用油（フライヤー用）", "ポテト（フレンチフライ）", "コーン（缶詰）",
+        "パン（ミニフィセル）", "デザート用ティラミス", "イタリアンプリン", "チョコレートソース",
+        "テイクアウト用容器（M）", "テイクアウト用手提げ袋", "ユニフォーム（ポロシャツ L）", "名札（スペア）");
 
-      // 2. リポジトリを使ってDBへ保存
+    for (int i = 0; i < supplies.size(); i++) {
+      // 1. Order（注文）の作成
+      Order order = new Order();
+      order.setUserId("tenpo_user"); // 店舗ユーザーが申請者
+      order.setItemName(supplies.get(i));
+      order.setQuantity(i + 1); // 1, 2, 3...
+      order.setAppliedAt(LocalDateTime.now().minusDays(40 - i)); // 40日前から順に
+      order.setStatusCode(40); // 40 = 完了
+      Order savedOrder = orderRepository.save(order);
+
+      // 2. StatusHistory（履歴）の作成
+      StatusHistory history = new StatusHistory();
+      history.setOrderId(savedOrder.getOrderId());
+      history.setBeforeStatusCode(20); // 20 = 確認中
+      history.setAfterStatusCode(40); // 40 = 完了
+      history.setChangedBy("honbu_user"); // 本部ユーザーがステータス変更を実行
+      history.setChangedAt(savedOrder.getAppliedAt().plusHours(1));
       statusHistoryRepository.save(history);
     }
+
     System.out.println("--- データ投入完了 ---");
   }
 }
