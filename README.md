@@ -9,7 +9,7 @@
 現場の「発注ミス」と「管理コスト」を削減するためのWebアプリケーションです。
 短期間開発ながら、「ユーザーが迷わない操作性」と「開発現場での保守性」を両立させています。
 
-* **Demo URL**: [https://restaurant-supply-order.onrender.com]
+* **Demo URL**: [https://restaurant-supply-order.onrender.com/]
 * **テスト用アカウント（店舗権限）**: `tenpo_user` / `tenpo`
 * **テスト用アカウント（本部権限）**: `honbu_user` / `honbu`
     * ※[デモ用アカウント一覧](#5-デモ用ログインアカウント一覧)に他店舗のIDも記載しています。
