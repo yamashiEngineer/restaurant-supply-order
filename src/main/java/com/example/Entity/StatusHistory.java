@@ -2,6 +2,7 @@ package com.example.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -57,7 +58,7 @@ public class StatusHistory {
   @Column(name = "comment", length = 255)
   private String comment;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY) // 必要な時だけJOINする
   @JoinColumn(name = "changed_by", referencedColumnName = "user_id", insertable = false, updatable = false)
   private Users changer;
 }
